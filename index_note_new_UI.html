@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product Inventory - Fully Responsive</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Define modern color variables */
+    :root {
+        --primary-color: #007bff;
+        --primary-hover: #0056b3;
+        --text-dark: #333;
+        --bg-light: #f4f7f9;
+        --card-bg: #ffffff;
+        --border-color: #e0e6ed;
+        --shadow-subtle: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* 1. Global Reset & Box Sizing (Crucial for Responsiveness) */
+    * {
+        box-sizing: border-box; /* Ensures padding and border are included in the element's total width/height */
+    }
+
+    /* General Styling */
+    body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 40px;
+        background: var(--bg-light);
+        color: var(--text-dark);
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        min-height: 100vh;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 36px;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 30px;
+    }
+
+    /* 2. Container Max Widths for Desktop */
+    .search-container {
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: 12px;
+        max-width: 600px; /* Max size on large screens */
+        width: 100%; /* Must be 100% to shrink on mobile */
+        box-shadow: var(--shadow-subtle);
+        margin-bottom: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .table-container {
+        max-width: 900px; /* Max size on large screens */
+        width: 100%; /* Must be 100% to shrink on mobile */
+        box-shadow: var(--shadow-subtle);
+        border-radius: 12px;
+        overflow-x: auto; /* **FIX:** Allows horizontal scrolling for wide tables on mobile */
+    }
+
+    /* Input & Buttons */
+    input {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+        outline: none;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+
+    button {
+        flex: 1; 
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.1s;
+        font-weight: 600;
+        color: white;
+    }
+    
+    .button-group > button:first-child {
+        background-color: var(--primary-color);
+    }
+    
+    .button-group > button:last-child {
+        background-color: #6c757d;
+    }
+
+    button:hover { opacity: 0.9; }
+    button:active { transform: scale(0.98); }
+
+    /* Table Styling */
+    table {
+        min-width: 600px; /* **FIX:** Ensures the table content doesn't squeeze too much on mobile */
+        width: 100%; 
+        border-collapse: collapse;
+        font-size: 15px;
+        text-align: left; 
+    }
+    
+    th, td {
+        padding: 15px 20px;
+        background: var(--card-bg); 
+    }
+    
+    th {
+        background: var(--bg-light);
+        color: var(--text-dark);
+        font-weight: 700;
+        text-transform: uppercase;
+        border-bottom: 2px solid var(--border-color);
+        text-align: center;
+    }
+
+    td {
+        border-bottom: 1px solid var(--border-color);
+        text-align: center;
+    }
+    
+    #productTable tr:hover td {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    .product-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 8px; 
+        border: 1px solid var(--border-color);
+    }
+
+    /* 3. Media Query for Mobile Devices */
+    @media (max-width: 650px) {
+        body {
+            padding: 15px; /* Less padding on small screens */
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        .search-container {
+            padding: 15px;
+            gap: 10px;
+        }
+        .button-group {
+            flex-direction: column; /* Stack buttons vertically */
+            gap: 8px;
+        }
+        button {
+            padding: 10px; /* Slightly smaller padding for buttons */
+        }
+        
+        /* Table adjustments for mobile */
+        th, td {
+            padding: 12px 10px; /* Reduced padding */
+            font-size: 14px;
+        }
+        .product-img {
+            width: 40px;
+            height: 40px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>Product Inventory Tracker</h1>
+
+<div class="search-container">
+    <input type="text" id="searchID" placeholder="Search Product ID">
+    <div class="button-group">
+        <button onclick="searchProduct()">Search</button>
+        <button onclick="showAll()">Show All</button>
+    </div>
+</div>
+
+<div class="table-container">
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+</div>
+
+<script>
+let allProducts = [];
+
+const sampleProducts = [
+    { image: "https://via.placeholder.com/50/007bff/fff?text=P1", name: "Premium Laptop Pro", id: "LP2025", price: 1299 },
+    { image: "https://via.placeholder.com/50/28a745/fff?text=P2", name: "Wireless Keyboard", id: "KB105", price: 85 },
+    { image: "https://via.placeholder.com/50/ffc107/fff?text=P3", name: "4K Monitor 32-inch", id: "MN400", price: 499 },
+    { image: "https://via.placeholder.com/50/dc3545/fff?text=P4", name: "Ergonomic Mouse", id: "MS30", price: 45 },
+    { image: "https://via.placeholder.com/50/6f42c1/fff?text=P5", name: "Storage Drive 1TB", id: "SD1000", price: 120 }
+];
+
+function loadSamples() {
+    allProducts = [...sampleProducts];
+    renderTable(allProducts);
+}
+
+function renderTable(products) {
+    const tbody = document.getElementById("productTable").querySelector("tbody");
+    tbody.innerHTML = ''; 
+
+    if (products.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align: center; padding: 30px; color: #999;">
+                    No products found matching your search criteria.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    products.forEach(p => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td><img src="${p.image}" class="product-img"></td>
+            <td>${p.name}</td>
+            <td>${p.id}</td>
+            <td>$${p.price.toLocaleString()}</td>
+        `;
+    });
+}
+
+function searchProduct() {
+    const searchVal = document.getElementById("searchID").value.trim().toLowerCase();
+
+    if (!searchVal) {
+        alert("Enter a product ID to search.");
+        return;
+    }
+
+    const results = allProducts.filter(p => 
+        p.id.toLowerCase() === searchVal
+    );
+
+    renderTable(results);
+}
+
+function showAll() {
+    renderTable(allProducts);
+    document.getElementById("searchID").value = "";
+}
+
+window.onload = loadSamples;
+</script>
+
+</body>
+</html>
