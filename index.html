@@ -2,276 +2,445 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Product Inventory - Fully Responsive</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Product Inventory Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
-    /* Define modern color variables */
-    :root {
-        --primary-color: #007bff;
-        --primary-hover: #0056b3;
-        --text-dark: #333;
-        --bg-light: #f4f7f9;
-        --card-bg: #ffffff;
-        --border-color: #e0e6ed;
-        --shadow-subtle: 0 6px 20px rgba(0, 0, 0, 0.08);
-    }
 
-    /* 1. Global Reset & Box Sizing (Crucial for Responsiveness) */
-    * {
-        box-sizing: border-box; /* Ensures padding and border are included in the element's total width/height */
-    }
+/* ============================================================
+   TECHNOLOGY WEBSITE THEME + RESPONSIVE LAYOUT
+   ============================================================ */
 
-    /* General Styling */
+:root {
+    --primary: #0ea5e9;
+    --primary-dark: #0284c7;
+    --neon: #38bdf8;
+    --bg-dark: #0f172a;
+    --bg-card: rgba(255, 255, 255, 0.07);
+    --text-light: #e2e8f0;
+    --text-muted: #94a3b8;
+    --shadow-neon: 0 0 20px rgba(56,189,248,0.4);
+    --radius: 14px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   SIDEBAR — TECH STYLE
+   ============================================================ */
+
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(10px);
+    padding-top: 35px;
+    box-shadow: inset 0 0 15px rgba(56,189,248,0.15);
+    border-right: 1px solid rgba(56,189,248,0.2);
+    transition: 0.3s ease;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 22px;
+    color: var(--neon);
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+    text-shadow: var(--shadow-neon);
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 28px;
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: 0.2s;
+}
+
+.sidebar a:hover,
+.sidebar .active-link {
+    background: rgba(56,189,248,0.12);
+    border-left: 3px solid var(--neon);
+    color: var(--neon);
+    text-shadow: var(--shadow-neon);
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+
+.main {
+    margin-left: 260px;
+    padding: 40px;
+    width: 100%;
+    transition: 0.3s ease;
+}
+
+h1 {
+    font-size: 2.6em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--neon);
+    text-shadow: var(--shadow-neon);
+}
+
+/* ============================================================
+   SEARCH BOX (Glass UI)
+   ============================================================ */
+
+.search-container {
+    background: var(--bg-card);
+    padding: 25px;
+    border-radius: var(--radius);
+    max-width: 900px;
+    margin: 0 auto 35px auto;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 20px rgba(56,189,248,0.15);
+}
+
+.search-input-group {
+    display: flex;
+    gap: 14px;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: var(--text-light);
+}
+
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 14px;
+}
+
+.button-group button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    transition: 0.2s;
+}
+
+#search-btn {
+    background: var(--primary);
+    color: white;
+}
+
+#search-btn:hover {
+    background: var(--primary-dark);
+}
+
+#show-all-btn {
+    background: rgba(255,255,255,0.15);
+    color: var(--text-light);
+}
+
+#show-all-btn:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+/* ============================================================
+   PRODUCT TABLE
+   ============================================================ */
+
+.table-wrapper {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 20px rgba(56,189,248,0.15);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    color: var(--neon);
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+td {
+    padding: 16px;
+    font-size: 15px;
+    color: var(--text-light);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+img {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(56,189,248,0.3);
+}
+
+/* ============================================================
+   COLOR TAGS
+   ============================================================ */
+
+.color-name {
+    background: rgba(255,255,255,0.08);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-right: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.color-name:hover {
+    background: rgba(56,189,248,0.25);
+}
+
+.selected-color-name {
+    background: var(--primary);
+    color: white;
+    box-shadow: var(--shadow-neon);
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+/* tablet and lower */
+@media (max-width: 992px) {
     body {
-        font-family: 'Inter', sans-serif;
-        margin: 0;
-        padding: 40px;
-        background: var(--bg-light);
-        color: var(--text-dark);
-        display: flex;
         flex-direction: column;
-        align-items: center; 
-        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        display: flex;
+        overflow-x: auto;
+        padding: 15px 10px;
+    }
+
+    .sidebar h2 {
+        display: none;
+    }
+
+    .sidebar a {
+        flex-direction: column;
+        padding: 10px 15px;
+        font-size: 13px;
+        border-left: none;
+        border-bottom: 2px solid transparent;
+    }
+
+    .sidebar a.active-link {
+        border-bottom: 2px solid var(--neon);
+        border-left: none;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 25px;
     }
 
     h1 {
-        text-align: center;
-        font-size: 36px;
-        font-weight: 700;
-        color: var(--primary-color);
-        margin-bottom: 30px;
+        font-size: 2em;
     }
+}
 
-    /* 2. Container Max Widths for Desktop */
-    .search-container {
-        background: var(--card-bg);
-        padding: 25px;
-        border-radius: 12px;
-        max-width: 600px; /* Max size on large screens */
-        width: 100%; /* Must be 100% to shrink on mobile */
-        box-shadow: var(--shadow-subtle);
-        margin-bottom: 30px;
-        display: flex;
+/* mobile */
+@media (max-width: 600px) {
+    .search-input-group {
         flex-direction: column;
-        gap: 15px;
-    }
-
-    .table-container {
-        max-width: 900px; /* Max size on large screens */
-        width: 100%; /* Must be 100% to shrink on mobile */
-        box-shadow: var(--shadow-subtle);
-        border-radius: 12px;
-        overflow-x: auto; /* **FIX:** Allows horizontal scrolling for wide tables on mobile */
-    }
-
-    /* Input & Buttons */
-    input {
-        width: 100%;
-        padding: 12px 15px;
-        font-size: 16px;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    input:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-        outline: none;
     }
 
     .button-group {
-        display: flex;
-        gap: 10px;
-        width: 100%;
+        flex-direction: column;
     }
 
-    button {
-        flex: 1; 
-        padding: 12px 20px;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.1s;
-        font-weight: 600;
-        color: white;
-    }
-    
-    .button-group > button:first-child {
-        background-color: var(--primary-color);
-    }
-    
-    .button-group > button:last-child {
-        background-color: #6c757d;
-    }
-
-    button:hover { opacity: 0.9; }
-    button:active { transform: scale(0.98); }
-
-    /* Table Styling */
-    table {
-        min-width: 600px; /* **FIX:** Ensures the table content doesn't squeeze too much on mobile */
-        width: 100%; 
-        border-collapse: collapse;
-        font-size: 15px;
-        text-align: left; 
-    }
-    
-    th, td {
-        padding: 15px 20px;
-        background: var(--card-bg); 
-    }
-    
-    th {
-        background: var(--bg-light);
-        color: var(--text-dark);
-        font-weight: 700;
-        text-transform: uppercase;
-        border-bottom: 2px solid var(--border-color);
-        text-align: center;
+    img {
+        width: 50px;
+        height: 50px;
     }
 
     td {
-        border-bottom: 1px solid var(--border-color);
-        text-align: center;
-    }
-    
-    #productTable tr:hover td {
-        background-color: #f8f9fa;
-        cursor: pointer;
+        font-size: 13px;
     }
 
-    .product-img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 8px; 
-        border: 1px solid var(--border-color);
+    .color-name {
+        display: inline-block;
+        margin-bottom: 5px;
     }
+}
 
-    /* 3. Media Query for Mobile Devices */
-    @media (max-width: 650px) {
-        body {
-            padding: 15px; /* Less padding on small screens */
-        }
-        h1 {
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
-        .search-container {
-            padding: 15px;
-            gap: 10px;
-        }
-        .button-group {
-            flex-direction: column; /* Stack buttons vertically */
-            gap: 8px;
-        }
-        button {
-            padding: 10px; /* Slightly smaller padding for buttons */
-        }
-        
-        /* Table adjustments for mobile */
-        th, td {
-            padding: 12px 10px; /* Reduced padding */
-            font-size: 14px;
-        }
-        .product-img {
-            width: 40px;
-            height: 40px;
-        }
-    }
 </style>
 </head>
+
 <body>
 
-<h1>Product Inventory Tracker</h1>
+<!-- ============================================================
+     SIDEBAR MENU
+     ============================================================ -->
+<div class="sidebar">
+    <a class="filter-link active-link" data-category="all" onclick="showAll(this)">
+        <i class="fas fa-list-ul"></i> All
+    </a>
+    <a class="filter-link" data-category="powerbank" onclick="filterCategory('powerbank', this)">
+        <i class="fas fa-battery-half"></i> Powerbanks
+    </a>
+    <a class="filter-link" data-category="airpod" onclick="filterCategory('airpod', this)">
+        <i class="fas fa-headphones"></i> Airpods
+    </a>
+    <a class="filter-link" data-category="other" onclick="filterCategory('other', this)">
+        <i class="fas fa-box-open"></i> Other
+    </a>
+</div>
 
-<div class="search-container">
-    <input type="text" id="searchID" placeholder="Search Product ID">
-    <div class="button-group">
-        <button onclick="searchProduct()">Search</button>
-        <button onclick="showAll()">Show All</button>
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+
+<div class="main">
+
+    <h1>Product Inventory Management</h1>
+
+    <div class="search-container">
+        <div class="search-input-group">
+            <input type="text" id="searchID" placeholder="Search Product ID...">
+        </div>
+
+        <div class="button-group">
+            <button id="search-btn" onclick="searchProduct()">Search</button>
+            <button id="show-all-btn" onclick="showAll(document.querySelector('.sidebar a[data-category=\"all\"]'))">Show All</button>
+        </div>
     </div>
+
+    <div class="table-wrapper">
+        <table id="productTable"></table>
+    </div>
+
 </div>
 
-<div class="table-container">
-    <table id="productTable">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>ID</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            </tbody>
-    </table>
-</div>
-
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
 <script>
+
 let allProducts = [];
 
-const sampleProducts = [
-    { image: "https://via.placeholder.com/50/007bff/fff?text=P1", name: "Premium Laptop Pro", id: "LP2025", price: 1299 },
-    { image: "https://via.placeholder.com/50/28a745/fff?text=P2", name: "Wireless Keyboard", id: "KB105", price: 85 },
-    { image: "https://via.placeholder.com/50/ffc107/fff?text=P3", name: "4K Monitor 32-inch", id: "MN400", price: 499 },
-    { image: "https://via.placeholder.com/50/dc3545/fff?text=P4", name: "Ergonomic Mouse", id: "MS30", price: 45 },
-    { image: "https://via.placeholder.com/50/6f42c1/fff?text=P5", name: "Storage Drive 1TB", id: "SD1000", price: 120 }
+const productData = [
+    {id:"001", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLXnBTVrSf3fVFZ7v4nKvbb5Z27PO3ObYERtm4tvPIFkBZDB6X", name:"Mobile Powerbank 22.5w", price:22, category:"powerbank", stockIn:0, stockOut:0, colors:["Sky Color","White"], selectedColor:"Sky Color"},
+    {id:"002", image:"https://images.khmer24.co/25-07-23/s-powerbank-fast-charge-80000-mah-156716175322758785100868-b.jpg", name:"Smart Powerbank 120w", price:22, category:"powerbank", stockIn:0, stockOut:0, colors:["White","Black"], selectedColor:"White"},
+    {id:"003", image:"https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSFgl_I2G8V_11dff1o1EB7E73q4Ai-Ozp2YEn0zXaPvfpDvlCD", name:"POWER BANK Cartoon Series", price:15, category:"powerbank", stockIn:0, stockOut:0, colors:["Shin Chan","Bear","Hello Kitty","Pattric Star","Lotso","Sponge Bob","Rabbit","Smile","Winnie The Pooh"], selectedColor:"Shin Chan"},
+    {id:"004", image:"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRVEeMXljyt_6tqKJk5smQO1qlb-2HV9Lwa2a2c32_mpGaQ4ENX", name:"Cartoon Powerbank", price:29, category:"powerbank", stockIn:0, stockOut:0, colors:["White","Black"], selectedColor:"White"},
+    {id:"005", image:"https://dutchgoat.s3.us-east-1.amazonaws.com/as2/2025/10/medium/Tx8m2UGF_0ua639zJ4KZLKtZ.jpeg", name:"PORTABLE POWER BANK WITH CABLE", price:8, category:"powerbank", stockIn:0, stockOut:0, colors:["Black","Orange","White","Grey"], selectedColor:"Black"},
+    {id:"006", image:"https://img.tvcmall.com/dynamic/uploads/details/740x740_663200433D-2.webp", name:"Pinqiu Magnetic Wireless battery", price:12, category:"other", stockIn:0, stockOut:0, colors:["White","Sky Color"], selectedColor:"White"},
+    {id:"007", image:"https://m.media-amazon.com/images/I/71zny7BTRlL._AC_SL1500_.jpg", name:"Airpods Pro", price:10, category:"airpod", stockIn:0, stockOut:0, colors:["White"], selectedColor:"White"},
+    {id:"008", image:"https://s.alicdn.com/@sc04/kf/H3a92673678fe4b8aa5cbf410446d5c15w/20000mAh-High-Capacity-Portable-Power-Bank-With-Built-in-4-Cables-QC-3.0-22.5W-PD-20W-Fast-Charging-Powerbank-20000-mAh.jpg_300x300.jpg", name:"P5 POWER BANK", price:13, category:"powerbank", stockIn:0, stockOut:0, colors:["White"], selectedColor:"White"},
+    {id:"009", image:"https://s.alicdn.com/@sc04/kf/H3a92673678fe4b8aa5cbf410446d5c15w/20000mAh-High-Capacity-Portable-Power-Bank-With-Built-in-4-Cables-QC-3.0-22.5W-PD-20W-Fast-Charging-Powerbank-20000-mAh.jpg_300x300.jpg", name:"P4 POWER BANK", price:9, category:"powerbank", stockIn:0, stockOut:0, colors:["White"], selectedColor:"White"}
 ];
 
 function loadSamples() {
-    allProducts = [...sampleProducts];
+    allProducts = productData.map(p => ({ ...p }));
+    renderTable(allProducts);
+}
+
+function selectColor(id, color) {
+    const p = allProducts.find(x => x.id === id);
+    p.selectedColor = color;
     renderTable(allProducts);
 }
 
 function renderTable(products) {
-    const tbody = document.getElementById("productTable").querySelector("tbody");
-    tbody.innerHTML = ''; 
-
-    if (products.length === 0) {
-        tbody.innerHTML = `
+    const table = document.getElementById("productTable");
+    table.innerHTML = `
+        <thead>
             <tr>
-                <td colspan="4" style="text-align: center; padding: 30px; color: #999;">
-                    No products found matching your search criteria.
-                </td>
+                <th></th>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Colors</th>
+                <th>Price</th>
+                <th>In</th>
+                <th>Out</th>
             </tr>
-        `;
-        return;
-    }
+        </thead>
+        <tbody></tbody>
+    `;
+
+    const tbody = table.querySelector("tbody");
 
     products.forEach(p => {
+        const colorNames =
+            p.colors.map(color => `
+                <span class="color-name ${color === p.selectedColor ? "selected-color-name" : ""}" onclick="selectColor('${p.id}','${color}')">${color}</span>
+            `).join("");
+
         const row = tbody.insertRow();
         row.innerHTML = `
-            <td><img src="${p.image}" class="product-img"></td>
+            <td><img src="${p.image}"></td>
             <td>${p.name}</td>
             <td>${p.id}</td>
-            <td>$${p.price.toLocaleString()}</td>
+            <td>${colorNames}</td>
+            <td>$${p.price}</td>
+            <td>${p.stockIn}</td>
+            <td>${p.stockOut}</td>
         `;
     });
 }
 
 function searchProduct() {
-    const searchVal = document.getElementById("searchID").value.trim().toLowerCase();
-
-    if (!searchVal) {
-        alert("Enter a product ID to search.");
-        return;
-    }
-
-    const results = allProducts.filter(p => 
-        p.id.toLowerCase() === searchVal
-    );
-
-    renderTable(results);
+    const val = document.getElementById("searchID").value.toLowerCase();
+    renderTable(allProducts.filter(p => p.id.toLowerCase().includes(val)));
 }
 
-function showAll() {
+function filterCategory(category, element) {
+    document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active-link"));
+    element.classList.add("active-link");
+    renderTable(allProducts.filter(p => p.category === category));
+}
+
+function showAll(el) {
+    document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active-link"));
+    el.classList.add("active-link");
     renderTable(allProducts);
-    document.getElementById("searchID").value = "";
 }
 
 window.onload = loadSamples;
+
 </script>
 
 </body>
